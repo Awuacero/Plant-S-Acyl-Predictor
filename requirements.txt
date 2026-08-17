@@ -1,0 +1,8 @@
+streamlit
+biopython
+pandas
+numpy<2.0.0
+scipy
+scikit-learn
+tensorflow-cpu==2.15.0
+tf_keras==2.15.0
