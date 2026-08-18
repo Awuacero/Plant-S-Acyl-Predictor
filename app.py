@@ -5,6 +5,7 @@ import io
 import os
 import subprocess
 import tempfile
+import sys
 
 st.set_page_config(layout="wide", page_title="CysFilter & MusiteDeep Pipeline")
 st.title("🧬 Plant S-Acylation Pipeline: CysFilter & MusiteDeep Integration")
@@ -165,7 +166,7 @@ if filtered_sequences:
                     try:
                         # Command execution matching your Colab workflow
                         cmd = [
-                            "python", "predict_multi_batch.py",
+                            sys.executable, "predict_multi_batch.py",
                             "-input", tmp_input_path,
                             "-output", output_prefix,
                             "-model-prefix", "models/S-palmitoyl_cysteine"
