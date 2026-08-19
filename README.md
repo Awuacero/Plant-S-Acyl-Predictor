@@ -1,3 +1,15 @@
+## License and Copyright
+
+**Copyright (c) 2026 Andrea Román Mateo, Antonio Castro, et al. All Rights Reserved.**
+
+This repository and its contents are currently closed-source. The code and web application are provided publicly for peer-review and visualization purposes only, in association with an unpublished manuscript. 
+
+**No permission is granted to use, copy, modify, or distribute this software.** 
+
+Once the associated scientific paper is officially published, this repository will be updated with an open-source license.
+
+*Note: This project integrates third-party components (MusiteDeep) which are distributed under the MIT License. See the `CREDITS.md` file for full details and attributions.*
+
 # Plant-S-Acyl-Predictor 🌿
 
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://plant-s-acyl-predictor.streamlit.app/)
