@@ -9,6 +9,7 @@ import sys
 
 st.set_page_config(layout="wide", page_title="CysFilter & MusiteDeep Pipeline")
 st.title("🧬 Plant S-Acylation Pipeline: CysFilter & MusiteDeep Integration")
+st.warning("⚠️ **Notice: Under Peer Review**\n\nThis tool is part of an unpublished scientific manuscript. The methodology, underlying code, and pipeline are under Copyright (c) 2026. All rights reserved. Please do not distribute.")
 st.markdown("---")
 
 # --- 1. Sequence Filtering ---
@@ -139,6 +140,18 @@ if filtered_sequences:
             st.header("4. MusiteDeep Prediction Pipeline")
             st.markdown("Generate a refined FASTA file containing only proteins that passed the biophysical filter and run deep learning inference for S-palmitoylation.")
 
+            # NUEVO: Control interactivo del Cutoff
+            col_cutoff, _ = st.columns([1, 1])
+            with col_cutoff:
+                musite_cutoff = st.slider(
+                    "Prediction Threshold (Cutoff)",
+                    min_value=0.0,
+                    max_value=1.0,
+                    value=0.65,
+                    step=0.05,
+                    help="Based on our benchmarking, we recommend a stringent cutoff of 0.65 to minimize false positives in plant proteomes."
+                )
+
             # Filter original sequences to keep only those with valid exposed cysteines
             passing_sequences = [seq for seq in filtered_sequences if seq.id in valid_protein_ids]
 
@@ -164,12 +177,13 @@ if filtered_sequences:
                     output_prefix = tempfile.mktemp(prefix="musite_out_")
 
                     try:
-                        # Command execution matching your Colab workflow
+                        # Command execution - SE AÑADE EL ARGUMENTO -cutoff
                         cmd = [
                             sys.executable, "predict_multi_batch.py",
                             "-input", tmp_input_path,
                             "-output", output_prefix,
-                            "-model-prefix", "models/S-palmitoyl_cysteine"
+                            "-model-prefix", "models/S-palmitoyl_cysteine",
+                            "-cutoff", str(musite_cutoff)
                         ]
                         
                         process = subprocess.run(cmd, capture_output=True, text=True, check=True)
@@ -210,3 +224,19 @@ if filtered_sequences:
 
 else:
     st.info("Please upload a FASTA file to begin processing.")
+
+st.markdown("---")
+
+# --- 5. Bibliography & References ---
+st.header("5. References & Bibliography")
+st.markdown("""
+**Scientific Background & Methodology:**
+* Román Mateo, A., Gallego, F., Santos, J., Alché, J. D., Claros, G., Veredas, F. J., & Castro, A. (2026). *Integrative Computational and Experimental S-Acylation Profiling Reveals a Conserved Pollen S-Acylome in Angiosperms*. (Unpublished manuscript).
+
+**Biophysical Scales (Surface Accessibility):**
+* Koehler, J., Woetzel, N., Staritzbichler, R., Sanders, C. R., & Meiler, J. (2009). A unified hydrophobicity scale for multispan membrane proteins. *Proteins*, 76(1), 13-29. [https://doi.org/10.1002/prot.22315](https://doi.org/10.1002/prot.22315)
+* Kyte, J., & Doolittle, R. F. (1982). A simple method for displaying the hydropathic character of a protein. *Journal of Molecular Biology*, 157(1), 105–132. [https://doi.org/10.1016/0022-2836(82)90515-0](https://doi.org/10.1016/0022-2836(82)90515-0)
+
+**Deep Learning Architecture:**
+* Wang, D., Guan, Y., Shu, Q., Song, B., & Xu, D. (2017). MusiteDeep: A deep-learning framework for general and kinase-specific phosphorylation site prediction. *Bioinformatics*, 33(24), 3909–3916. [https://doi.org/10.1093/bioinformatics/btx496](https://doi.org/10.1093/bioinformatics/btx496)
+""")
